@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BookDepository</string>
+    <string name="book_title_hint">Введите название книги.</string>
+    <string name="book_title_label">Заголовок</string>
+    <string name="book_details_label">Описание</string>
+    <string name="book_readed_label">Прочтена?</string>
+    <string name="date_picker_title">Дата начала прочтения:</string>
+    <string name="time_picker_title">Время начала прочтения:</string>
+</resources>
