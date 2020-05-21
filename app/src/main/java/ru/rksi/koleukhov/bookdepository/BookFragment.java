@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,10 +87,12 @@ public class BookFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mBook.getDate());
-                dialog.setTargetFragment(BookFragment.this, REQUEST_DATE);
-                dialog.show(manager, DIALOG_DATE);
+                //FragmentManager manager = getFragmentManager();
+                //DatePickerFragment dialog = DatePickerFragment.newInstance(mBook.getDate());
+                //dialog.setTargetFragment(BookFragment.this, REQUEST_DATE);
+                Intent intent = DatePickerActivity.newIntent(getActivity(), mBook.getDate());
+                startActivityForResult(intent, REQUEST_DATE);
+                //dialog.show(manager, DIALOG_DATE);
             }
         });
         mTimeButton.setOnClickListener(new View.OnClickListener()
@@ -130,6 +133,7 @@ public class BookFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        Log.d("BookDepo", "onActivityResult");
         if(resultCode != Activity.RESULT_OK)
         {
             return;
