@@ -24,6 +24,11 @@ public class Book
         mDate.setMinutes(time.getMinutes());
     }
 
+    private void setTime(long time)
+    {
+        mDate.setTime(time);
+    }
+
     public UUID getId() {
         return mId;
     }
@@ -40,8 +45,11 @@ public class Book
         return mDate;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Date date)
+    {
+        long time = mDate.getTime();
         mDate = date;
+        this.setTime(time);
     }
 
     public boolean isReaded() {

@@ -23,13 +23,11 @@ public class BookLab
     private BookLab(Context context)
     {
         mBooks = new ArrayList<>();
-        for(int i = 0; i < 100; i++)
-        {
-            Book book = new Book();
-            book.setTitle("Book #" + i);
-            book.setReaded(i % 2 == 0);
-            mBooks.add(book);
-        }
+    }
+
+    public void addBook(Book b)
+    {
+        mBooks.add(b);
     }
 
     public List<Book> getBooks()

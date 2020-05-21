@@ -3,8 +3,10 @@ package ru.rksi.koleukhov.bookdepository;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.List;
 import java.util.UUID;
 
-public class BookPagerActivity extends FragmentActivity
+public class BookPagerActivity extends AppCompatActivity
 {
     private static final String EXTRA_BOOK_ID = "ru.rksi.koleukhov.bookdepository.book_id";
 
@@ -62,5 +64,11 @@ public class BookPagerActivity extends FragmentActivity
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        return super.onOptionsItemSelected(item);
     }
 }

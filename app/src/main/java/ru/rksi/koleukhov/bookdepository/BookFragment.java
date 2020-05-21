@@ -7,6 +7,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,6 +50,7 @@ public class BookFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         UUID bookId = (UUID) getArguments().getSerializable(ARG_BOOK_ID);
         mBook = BookLab.get(getActivity()).getBook(bookId);
     }
@@ -149,6 +153,27 @@ public class BookFragment extends Fragment
             Date time = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mBook.setTime(time);
             updateTime();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_book, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_item_delete_book:
+                BookLab.get(getActivity()).getBooks().remove(mBook);
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

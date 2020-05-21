@@ -6,4 +6,14 @@
     <string name="book_readed_label">Прочтена?</string>
     <string name="date_picker_title">Дата начала прочтения:</string>
     <string name="time_picker_title">Время начала прочтения:</string>
+    <string name="new_book">Новая книга</string>
+    <string name="show_subtitle">Показать подзаголовок</string>
+    <string name="hide_subtitle">Скрыть подзаголовок</string>
+    <plurals name="subtitle_plural">
+        <item quantity="one">%1$d книга</item>
+        <item quantity="few">%1$d книги</item>
+        <item quantity="other">%1$d книг</item>
+    </plurals>
+    <string name="delete_book">Удалить</string>
+    <string name="list_empty">Список пуст</string>
 </resources>

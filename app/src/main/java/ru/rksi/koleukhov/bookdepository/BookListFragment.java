@@ -2,13 +2,21 @@ package ru.rksi.koleukhov.bookdepository;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +26,7 @@ import java.util.List;
 
 public class BookListFragment extends Fragment
 {
+    private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
     private int mPosition;
 
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -57,7 +66,6 @@ public class BookListFragment extends Fragment
     private class BookAdapter extends RecyclerView.Adapter<BookHolder>
     {
         private List<Book> mBooks;
-        private BookHolder mBookHolder;
 
         public BookAdapter(List<Book> books)
         {
@@ -75,9 +83,8 @@ public class BookListFragment extends Fragment
         @Override
         public void onBindViewHolder(BookHolder holder, int position)
         {
-            Book book = mBooks.get(position);
-            holder.bindBook(book);
-            mBookHolder = holder;
+                Book book = mBooks.get(position);
+                holder.bindBook(book);
         }
 
         @Override
@@ -89,11 +96,15 @@ public class BookListFragment extends Fragment
 
     private RecyclerView mBookRecyclerView;
     private BookAdapter mAdapter;
+    private boolean mSubtitleVisible;
 
     private void updateUI()
     {
         BookLab bookLab = BookLab.get(getActivity());
         List<Book> books = bookLab.getBooks();
+        if(books.size() == 0)
+            Toast.makeText(getContext(), R.string.list_empty, Toast.LENGTH_SHORT).show();
+        updateSubtitle();
         if(mAdapter == null)
         {
             mAdapter = new BookAdapter(books);
@@ -103,7 +114,28 @@ public class BookListFragment extends Fragment
         {
             //mAdapter.notifyDataSetChanged();
             mAdapter.notifyItemChanged(mPosition);
+            mAdapter.notifyItemRemoved(books.size());
         }
+    }
+
+    private void updateSubtitle()
+    {
+        BookLab bookLab = BookLab.get(getActivity());
+        int bookCount = bookLab.getBooks().size();
+        String subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, bookCount, bookCount);
+        if(!mSubtitleVisible)
+        {
+            subtitle = null;
+        }
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -112,6 +144,10 @@ public class BookListFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
         mBookRecyclerView = (RecyclerView) view.findViewById(R.id.book_recycler_view);
         mBookRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if(savedInstanceState != null)
+        {
+            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
         updateUI();
         return view;
     }
@@ -122,4 +158,51 @@ public class BookListFragment extends Fragment
         super.onResume();
         updateUI();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_book_list, menu);
+
+        MenuItem subtitleItem = menu.findItem(R.id.menu_item_show_subtitle);
+        if(mSubtitleVisible)
+        {
+            subtitleItem.setTitle(R.string.hide_subtitle);
+        }
+        else
+        {
+            subtitleItem.setTitle(R.string.show_subtitle);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_item_new_book:
+                Book book = new Book();
+                BookLab.get(getActivity()).addBook(book);
+                Intent intent = BookPagerActivity.newIntent(getActivity(), book.getId());
+                startActivity(intent);
+                return true;
+            case  R.id.menu_item_show_subtitle:
+                mSubtitleVisible = !mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
+                updateSubtitle();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }
