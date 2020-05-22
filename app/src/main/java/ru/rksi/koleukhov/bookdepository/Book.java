@@ -14,7 +14,12 @@ public class Book
 
     public Book()
     {
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Book(UUID id)
+    {
+        mId = id;
         mDate = new Date();
     }
 
@@ -47,9 +52,9 @@ public class Book
 
     public void setDate(Date date)
     {
-        long time = mDate.getTime();
+        //long time = mDate.getTime();
         mDate = date;
-        this.setTime(time);
+        //this.setTime(time);
     }
 
     public boolean isReaded() {

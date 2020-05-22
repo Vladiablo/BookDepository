@@ -56,6 +56,13 @@ public class BookFragment extends Fragment
     }
 
     @Override
+    public void onPause()
+    {
+        super.onPause();
+        BookLab.get(getActivity()).updateBook(mBook);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_book, container, false);
@@ -78,7 +85,7 @@ public class BookFragment extends Fragment
             @Override
             public void afterTextChanged(Editable s)
             {
-
+                mBook.setTitle(mTitleField.getText().toString());
             }
         });
 
@@ -137,7 +144,6 @@ public class BookFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.d("BookDepo", "onActivityResult");
         if(resultCode != Activity.RESULT_OK)
         {
             return;
@@ -147,6 +153,7 @@ public class BookFragment extends Fragment
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mBook.setDate(date);
             updateDate();
+            updateTime();
         }
         if(requestCode == REQUEST_TIME)
         {
@@ -169,7 +176,7 @@ public class BookFragment extends Fragment
         switch (item.getItemId())
         {
             case R.id.menu_item_delete_book:
-                BookLab.get(getActivity()).getBooks().remove(mBook);
+                BookLab.get(getActivity()).deleteBook(mBook);
                 getActivity().finish();
                 return true;
             default:

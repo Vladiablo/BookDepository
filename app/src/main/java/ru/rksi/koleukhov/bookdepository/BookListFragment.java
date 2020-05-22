@@ -92,6 +92,11 @@ public class BookListFragment extends Fragment
         {
             return mBooks.size();
         }
+
+        public void setBooks(List<Book> books)
+        {
+            mBooks = books;
+        }
     }
 
     private RecyclerView mBookRecyclerView;
@@ -112,7 +117,7 @@ public class BookListFragment extends Fragment
         }
         else
         {
-            //mAdapter.notifyDataSetChanged();
+            mAdapter.setBooks(books);
             mAdapter.notifyItemChanged(mPosition);
             mAdapter.notifyItemRemoved(books.size());
         }
