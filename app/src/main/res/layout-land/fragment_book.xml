@@ -4,17 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/book_title_label"
-        style="?android:listSeparatorTextViewStyle"
-        />
-    <EditText android:id="@+id/book_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/book_title_hint"
-        />
+    <include layout="@layout/view_camera_and_title"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,5 +37,12 @@
             android:layout_weight="1"
             android:text="@string/book_readed_label" />
     </LinearLayout>
+    <Button
+        android:id="@+id/book_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/book_report_text"/>
 
 </LinearLayout>

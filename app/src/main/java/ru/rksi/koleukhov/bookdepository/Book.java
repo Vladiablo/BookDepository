@@ -64,4 +64,9 @@ public class Book
     public void setReaded(boolean readed) {
         mReaded = readed;
     }
+
+    public String getPhotoFilename()
+    {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
 }
