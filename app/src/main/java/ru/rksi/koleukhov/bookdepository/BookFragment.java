@@ -25,7 +25,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -213,8 +215,14 @@ public class BookFragment extends Fragment
                 @Override
                 public void onClick(View v)
                 {
-
-                    startActivityForResult(Intent.createChooser(getImage, getString(R.string.book_gallery)), REQUEST_IMAGE);
+                    if(BookListFragment.isReadGranted)
+                    {
+                        startActivityForResult(Intent.createChooser(getImage, getString(R.string.book_gallery)), REQUEST_IMAGE);
+                    }
+                    else
+                    {
+                        Toast.makeText(getContext(), R.string.request_read_external_storage_permission, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -225,9 +233,16 @@ public class BookFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                FragmentManager manager = getFragmentManager();
-                PhotoFragment fragment = PhotoFragment.newInstance(mPhotoFile.getPath());
-                fragment.show(manager, DIALOG_PHOTO);
+                if(mPhotoFile.exists())
+                {
+                    FragmentManager manager = getFragmentManager();
+                    PhotoFragment fragment = PhotoFragment.newInstance(mPhotoFile.getPath());
+                    fragment.show(manager, DIALOG_PHOTO);
+                }
+                else
+                {
+                    Toast.makeText(getContext(), R.string.no_photo, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -279,9 +294,9 @@ public class BookFragment extends Fragment
         else
         {
             Bitmap bitmap = null;
-            if(mPhotoView.isDirty())
-                bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
-            else
+            //if(mPhotoView.isDirty())
+            //    bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            //else
                 bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), mPhotoView.getWidth(), mPhotoView.getHeight());
             mPhotoView.setImageBitmap(bitmap);
         }
@@ -318,7 +333,7 @@ public class BookFragment extends Fragment
             Bitmap image = BitmapFactory.decodeFile(imagePath);
             if(image == null)
             {
-                Log.e("BookDepository", "Read external storage permission not granted");
+                Log.wtf("BookDepository", "Image is null.");
                 return;
             }
             try

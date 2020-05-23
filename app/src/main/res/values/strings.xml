@@ -24,4 +24,6 @@
     <string name="send_report">Отправить отчет о прочтении через</string>
     <string name="book_gallery_subject">BookDepository открыть изображение</string>
     <string name="book_gallery">Открыть изображение</string>
+    <string name="request_read_external_storage_permission">Предоставьте разрешение на хранилище, чтобы открыть изображение из галереи.</string>
+    <string name="no_photo">Нет изображения</string>
 </resources>

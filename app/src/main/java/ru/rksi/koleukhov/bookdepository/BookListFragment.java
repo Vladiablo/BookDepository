@@ -1,6 +1,7 @@
 package ru.rksi.koleukhov.bookdepository;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import java.util.List;
 public class BookListFragment extends Fragment
 {
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+    private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 4;
+    public static boolean isReadGranted = false;
     private int mPosition;
 
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -99,6 +102,7 @@ public class BookListFragment extends Fragment
         }
     }
 
+
     private RecyclerView mBookRecyclerView;
     private BookAdapter mAdapter;
     private boolean mSubtitleVisible;
@@ -141,6 +145,7 @@ public class BookListFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
     }
 
     @Override
@@ -206,6 +211,18 @@ public class BookListFragment extends Fragment
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if(requestCode == REQUEST_PERMISSION_READ_EXTERNAL_STORAGE)
+        {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                isReadGranted = true;
+            else
+                isReadGranted = false;
         }
     }
 
